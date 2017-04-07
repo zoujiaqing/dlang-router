@@ -2,8 +2,8 @@
 
 class Config
 {
-	this()
-	{
-		// Constructor code
-	}
+    this()
+    {
+        // Constructor code
+    }
 }

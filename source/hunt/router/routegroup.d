@@ -4,35 +4,35 @@ import hunt.router.Route;
 
 class RouteGroup
 {
-	this(string name)
-	{
-		this._name = name;
-	}
+    this(string name)
+    {
+        this._name = name;
+    }
 
-	public
-	{
-		void setName(string name)
-		{
-			this._name = name;
-		}
+    public
+    {
+        void setName(string name)
+        {
+            this._name = name;
+        }
 
-		string getName()
-		{
-			return this._name;
-		}
+        string getName()
+        {
+            return this._name;
+        }
 
-		RouteGroup addRoute(Route route)
-		{
-			this._routes[route.getPartern()] = route;
+        RouteGroup addRoute(Route route)
+        {
+            this._routes[route.getPartern()] = route;
 
-			return this;
-		}
+            return this;
+        }
 
-	}
+    }
 
-	private
-	{
-		string _name;
-		Route[string] _routes;
-	}
+    private
+    {
+        string _name;
+        Route[string] _routes;
+    }
 }
