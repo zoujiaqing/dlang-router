@@ -1,12 +1,5 @@
 ﻿module hunt.router.route;
 
-enum HTTP_METHOS {
-    GET = 1,
-    POST,
-    PUT,
-    DELETE
-}
-
 class Route
 {
     this()

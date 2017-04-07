@@ -1,10 +1,11 @@
 ﻿module hunt.router.routegroup;
 
+import hunt.router.define;
 import hunt.router.route;
 
 class RouteGroup
 {
-    this(string name)
+    this(string name = DEFUALT_ROUTE_GROUP)
     {
         this._name = name;
     }

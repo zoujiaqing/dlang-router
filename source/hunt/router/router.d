@@ -1,5 +1,6 @@
 ﻿module hunt.router.router;
 
+import hunt.router.define;
 import hunt.router.routegroup;
 import hunt.router.route;
 
@@ -51,12 +52,12 @@ class Router
 
         Router addRoute(Route route)
         {
-            this.addRoute("default", route);
+            this.addRoute(DEFUALT_ROUTE_GROUP, route);
 
             return this;
         }
 
-        Route match(string path, string group = "default")
+        Route match(string path, string group = DEFUALT_ROUTE_GROUP)
         {
             //
         }
@@ -65,9 +66,9 @@ class Router
     private
     {
         //
-        void loadConfig(string group = "default")
+        void loadConfig(string group = DEFUALT_ROUTE_GROUP)
         {
-            string configFile = ("defualt" == group) ? this._configPath ~ "routes" : this._configPath ~ group ~ "routes";
+            string configFile = (DEFUALT_ROUTE_GROUP == group) ? this._configPath ~ "routes" : this._configPath ~ group ~ "routes";
             
             // read file content
         }
