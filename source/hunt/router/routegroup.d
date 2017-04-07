@@ -1,6 +1,6 @@
 ﻿module hunt.router.routegroup;
 
-import hunt.router.Route;
+import hunt.router.route;
 
 class RouteGroup
 {
