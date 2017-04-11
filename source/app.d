@@ -22,11 +22,21 @@ void main()
     {
         writeln("404 Not Found");
     }
-
-    Route route2 = router.match("/user/add", "admin");
+    
+    Route route2 = router.match("/user/12345", "api");
     if (route2)
     {
         writeln("MCA is:" ~ route2.getModule() ~ route2.getController() ~ route2.getAction());
+    }
+    else
+    {
+        writeln("404 Not Found");
+    }
+    
+    Route route3 = router.match("/user/admin/tag/test1", "api");
+    if (route3)
+    {
+        writeln("MCA is:" ~ route3.getModule() ~ route3.getController() ~ route3.getAction());
     }
     else
     {

@@ -21,14 +21,14 @@ class Route
             return this._group;
         }
 
-        void setTemplate(string templateValue)
+        void setUrlTemplate(string urlTemplate)
         {
-            this._template = templateValue;
+            this._urlTemplate = urlTemplate;
         }
 
-        string getTemplate()
+        string getUrlTemplate()
         {
-            return this._template;
+            return this._urlTemplate;
         }
 
         void setRoute(string routeValue)
@@ -39,6 +39,26 @@ class Route
         string getRoute()
         {
             return this._route;
+        }
+
+        void setParamKeys(string[int] paramKeys)
+        {
+            this._paramKeys = paramKeys;
+        }
+
+        string[int] getParamKeys()
+        {
+            return this._paramKeys;
+        }
+
+        void setParams(string[string] params)
+        {
+            this._params = params;
+        }
+
+        string[string] getParams()
+        {
+            return this._params;
         }
 
         void setPattern(string patternValue)
@@ -54,6 +74,11 @@ class Route
         void setRegular(bool regularValue)
         {
             this._regular = regularValue;
+        }
+
+        bool getRegular()
+        {
+            return this._regular;
         }
 
         void setModule(string moduleValue)
@@ -103,9 +128,11 @@ class Route
         string _group;
 
         // Regex template
-        string _template;
+        string _urlTemplate;
 
         // http uri params
+        string[int] _paramKeys;
+
         string[string] _params;
 
         // like uri path

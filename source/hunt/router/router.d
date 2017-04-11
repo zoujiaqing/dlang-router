@@ -71,8 +71,7 @@ class Router
 
         Route match(string path, string group = DEFUALT_ROUTE_GROUP)
         {
-            //
-            return null;
+            return this._groups.get(group, null).match(path);
         }
     }
 
@@ -93,16 +92,21 @@ class Router
             // read file content
             Config config;
             RouteItem[] items = config.loadConfig(configFile);
+
+            Route route;
+
             foreach (item; items)
             {
-                routeGroup.addRoute(this.makeRoute(group, item.methods, item.path, item.route));
+                route = this.makeRoute(item.methods, item.path, item.route, group);
+                if (route)
+                {
+                    routeGroup.addRoute(route);
+                }
             }
         }
 
-        Route makeRoute(string group, string methods, string path, string mca)
+        Route makeRoute(string methods, string path, string mca, string group = DEFUALT_ROUTE_GROUP)
         {
-            tracef("methods: %s, path: %s, route: %s", methods, path, mca);
-
             auto route = new Route();
 
             route.setGroup(group);
@@ -114,7 +118,8 @@ class Router
 
             if (mcaArray.length > 3 || mcaArray.length < 2)
             {
-                warningf("this route config mca length is: %d", mcaArray.length);
+                warningf("this route config mca length is: %d (%s)", mcaArray.length, mca);
+                return null;
             }
 
             if (mcaArray.length == 2)
@@ -135,21 +140,23 @@ class Router
             auto matches = path.matchAll(regex(`<(\w+):([^>]+)>`));
             if (matches)
             {
-                string[int] params;
-
+                string[int] paramKeys;
                 int paramCount = 0;
                 string pattern = path;
+                string urlTemplate = path;
 
                 foreach (m; matches)
                 {
-                    params[paramCount] = m[1];
+                    paramKeys[paramCount] = m[1];
                     pattern = pattern.replaceFirst(m[0], "(" ~ m[2] ~ ")");
-
-                    trace(pattern);
-                    trace(m);
+                    urlTemplate = urlTemplate.replaceFirst(m[0], "{" ~ m[1] ~ "}");
+                    paramCount++;
                 }
 
+                route.setPattern(pattern);
+                route.setParamKeys(paramKeys);
                 route.setRegular(true);
+                route.setUrlTemplate(urlTemplate);
             }
 
             return route;

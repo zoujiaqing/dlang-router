@@ -1,4 +1,4 @@
 ﻿
-GET		/users			user.list
+GET		/users			user.list.abc
 
 POST, DELETE, PUT /user/info		user.info

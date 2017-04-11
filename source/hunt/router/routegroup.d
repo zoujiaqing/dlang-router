@@ -24,9 +24,52 @@ class RouteGroup
 
         RouteGroup addRoute(Route route)
         {
-            this._routes[route.getPattern()] = route;
+            if (route.getRegular())
+            {
+                this._regexRoutes ~= route;
+            }
+            else
+            {
+                this._routes[route.getPattern()] = route;
+            }
 
             return this;
+        }
+
+        Route match(string path)
+        {
+            Route route;
+
+            route = this._routes.get(path, null);
+
+            if (route)
+            {
+                return route;
+            }
+
+            import std.regex;
+
+            foreach (r; this._regexRoutes)
+            {
+                auto matched = path.match(regex(r.getPattern()));
+                if (matched)
+                {
+                    route = r;
+
+                    string[string] params;
+
+                    foreach(i, key; route.getParamKeys())
+                    {
+                        params[key] = matched.captures[i + 1];
+                    }
+
+                    route.setParams(params);
+
+                    return route;
+                }
+            }
+
+            return null;
         }
     }
 
@@ -34,5 +77,6 @@ class RouteGroup
     {
         string _name;
         Route[string] _routes;
+        Route[] _regexRoutes;
     }
 }
