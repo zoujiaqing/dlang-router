@@ -6,14 +6,13 @@ void main()
 {
     Router router = new Router;
 
-    router.addGroup("default");
-    router.addGroup("admin");
-    router.addGroup("api");
+    router.addGroup("admin", "domain", "admin.localhost.com");
+    router.addGroup("api", "directory", "apis");
 
     router.setConfigPath("config/");
     router.loadConfig();
 
-    Route route = router.match("/users");
+    Route route = router.match("localhost", "/users");
     if (route)
     {
         writeln("MCA is:" ~ route.getModule() ~ route.getController() ~ route.getAction());
@@ -23,7 +22,7 @@ void main()
         writeln("404 Not Found");
     }
     
-    Route route2 = router.match("/user/12345", "api");
+    Route route2 = router.match("localhost", "/user/12345");
     if (route2)
     {
         writeln("MCA is:" ~ route2.getModule() ~ route2.getController() ~ route2.getAction());
@@ -33,7 +32,7 @@ void main()
         writeln("404 Not Found");
     }
     
-    Route route3 = router.match("/user/admin/tag/test1", "api");
+    Route route3 = router.match("localhost", "/apis/user/admin/tag/test1");
     if (route3)
     {
         writeln("MCA is:" ~ route3.getModule() ~ route3.getController() ~ route3.getAction());

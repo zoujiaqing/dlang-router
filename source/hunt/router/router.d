@@ -9,25 +9,37 @@ class Router
 {
     public
     {
+        this()
+        {
+            this._defaultGroup = new RouteGroup(DEFUALT_ROUTE_GROUP);
+        }
+
         void setConfigPath(string path)
         {
             // supplemental slash
             this._configPath = (path[path.length-1] == '/') ? path : path ~ "/";
         }
 
-        void addGroup(string group)
+        void addGroup(string group, string method, string value)
         {
-            RouteGroup routeGroup = _groups.get(group, null);
+            RouteGroup routeGroup = ("domain" == method) ? _domainGroups.get(group, null) : _directoryGroups.get(group, null);
 
             if (routeGroup is null)
             {
                 routeGroup = new RouteGroup(group);
-                
-                this._groups[group] = routeGroup;
-            }
-            else
-            {
-                // have this group?
+
+                _groups[group] = routeGroup;
+
+                if ("domain" == method)
+                {
+                    _domainGroups[value] = routeGroup;
+                }
+                else
+                {
+                    _directoryGroups[value] = routeGroup;
+                }
+
+                this._supportMultipleGroup = true;
             }
         }
 
@@ -40,12 +52,9 @@ class Router
             }
         }
 
-        void reloadGroup(string group)
+        void setSupportMultipleGroup(bool enabled = true)
         {
-            this._groups.remove(group);
-
-            this.addGroup(group);
-            this.loadConfig(group);
+            this._supportMultipleGroup = enabled;
         }
 
         Router addRoute(string group, Route route)
@@ -69,9 +78,34 @@ class Router
             return this;
         }
 
-        Route match(string path, string group = DEFUALT_ROUTE_GROUP)
+        Route match(string domain, string path)
         {
-            return this._groups.get(group, null).match(path);
+            if (false == this._supportMultipleGroup)
+            {
+                // don't support multiple route group, use defualt group match function
+                return this._defaultGroup.match(path);
+            }
+
+            RouteGroup routeGroup;
+
+            routeGroup = this.getGroupByDomain(domain);
+
+            if (!routeGroup)
+            {
+                import std.array;
+                string directory = split(path, "/")[1];
+                routeGroup = this.getGroupByDirectory(directory);
+                if (routeGroup)
+                {
+                    path = path[directory.length .. $];
+                }
+                else
+                {
+                    routeGroup = this._defaultGroup;
+                }
+            }
+
+            return routeGroup.match(path);
         }
     }
 
@@ -103,6 +137,16 @@ class Router
                     routeGroup.addRoute(route);
                 }
             }
+        }
+
+        RouteGroup getGroupByDomain(string domain)
+        {
+            return this._domainGroups.get(domain, null);
+        }
+
+        RouteGroup getGroupByDirectory(string directory)
+        {
+            return this._groups.get(directory, null);
         }
 
         Route makeRoute(string methods, string path, string mca, string group = DEFUALT_ROUTE_GROUP)
@@ -165,7 +209,14 @@ class Router
 
     private
     {
+        RouteGroup _defaultGroup;
+
+        RouteGroup[string] _directoryGroups;
+        RouteGroup[string] _domainGroups;
         RouteGroup[string] _groups;
+
+        // enable muiltple route group
+        bool _supportMultipleGroup = false;
 
         string _configPath = "config/";
     }
