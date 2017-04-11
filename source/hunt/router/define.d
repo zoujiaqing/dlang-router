@@ -1,5 +1,7 @@
 ﻿module hunt.router.define;
 
+public import std.experimental.logger;
+
 // defualt route group name
 enum DEFUALT_ROUTE_GROUP = "default";
 

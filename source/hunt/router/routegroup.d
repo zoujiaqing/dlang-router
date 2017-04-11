@@ -24,11 +24,10 @@ class RouteGroup
 
         RouteGroup addRoute(Route route)
         {
-            this._routes[route.getPartern()] = route;
+            this._routes[route.getPattern()] = route;
 
             return this;
         }
-
     }
 
     private

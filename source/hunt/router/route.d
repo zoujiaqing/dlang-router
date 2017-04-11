@@ -1,5 +1,7 @@
 ﻿module hunt.router.route;
 
+import hunt.router.define;
+
 class Route
 {
     this()
@@ -39,14 +41,14 @@ class Route
             return this._route;
         }
 
-        void setPartern(string parternValue)
+        void setPattern(string patternValue)
         {
-            this._partern = parternValue;
+            this._pattern = patternValue;
         }
 
-        string getPartern()
+        string getPattern()
         {
-            return this._partern;
+            return this._pattern;
         }
 
         void setRegular(bool regularValue)
@@ -83,6 +85,16 @@ class Route
         {
             return this._action;
         }
+
+        void setMethods(HTTP_METHOS[] methods)
+        {
+            this._methods = methods;
+        }
+
+        HTTP_METHOS[] getMethods()
+        {
+            return this._methods;
+        }
     }
 
     private
@@ -97,7 +109,7 @@ class Route
         string[string] _params;
 
         // like uri path
-        string _partern;
+        string _pattern;
 
         // path to module.controller.action
         string _route;
@@ -115,6 +127,6 @@ class Route
         string _action;
 
         // allowd http methods
-        HTTP_METHOS[] _methods = { HTTP_METHOS.GET, HTTP_METHOS.POST, HTTP_METHOS.PUT, HTTP_METHOS. DELETE };
+        HTTP_METHOS[] _methods = [ HTTP_METHOS.GET, HTTP_METHOS.POST, HTTP_METHOS.PUT, HTTP_METHOS.DELETE ];
     }
 }

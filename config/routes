@@ -1,2 +1,4 @@
 ﻿
 GET		/users			user.list
+
+POST, DELETE, PUT /user/info		user.info
