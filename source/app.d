@@ -12,7 +12,7 @@ void main()
     router.setConfigPath("config/");
     router.loadConfig();
 
-    Route route = router.match("localhost", "/users");
+    Route route = router.match("localhost", "GET", "/users");
     if (route)
     {
         writeln("MCA is:" ~ route.getModule() ~ route.getController() ~ route.getAction());
@@ -22,7 +22,7 @@ void main()
         writeln("404 Not Found");
     }
     
-    Route route2 = router.match("localhost", "/user/12345");
+    Route route2 = router.match("localhost", "POST","/user/12345");
     if (route2)
     {
         writeln("MCA is:" ~ route2.getModule() ~ route2.getController() ~ route2.getAction());
@@ -32,7 +32,7 @@ void main()
         writeln("404 Not Found");
     }
     
-    Route route3 = router.match("localhost", "/apis/user/admin/tag/test1");
+    Route route3 = router.match("localhost", "DELETE", "/apis/user/admin/tag/test1");
     if (route3)
     {
         writeln("MCA is:" ~ route3.getModule() ~ route3.getController() ~ route3.getAction());

@@ -45,6 +45,8 @@ class Router
 
         void loadConfig()
         {
+            this.loadConfig(DEFUALT_ROUTE_GROUP);
+
             // load this group routes from config file
             foreach (key, obj; this._groups)
             {
@@ -78,7 +80,7 @@ class Router
             return this;
         }
 
-        Route match(string domain, string path)
+        Route match(string domain, string method, string path)
         {
             if (false == this._supportMultipleGroup)
             {
@@ -114,11 +116,20 @@ class Router
         //
         void loadConfig(string group = DEFUALT_ROUTE_GROUP)
         {
-            auto routeGroup = this._groups.get(group, null);
-            if (routeGroup is null)
+            RouteGroup routeGroup;
+
+            if (group == DEFUALT_ROUTE_GROUP)
             {
-                warningf("Group [%s] non-existent.", group);
-                return;
+                routeGroup = this._defaultGroup;
+            }
+            else
+            {
+                routeGroup = this._groups.get(group, null);
+                if (routeGroup is null)
+                {
+                    warningf("Group [%s] non-existent.", group);
+                    return;
+                }
             }
 
             string configFile = (DEFUALT_ROUTE_GROUP == group) ? this._configPath ~ "routes" : this._configPath ~ group ~ ".routes";
@@ -165,18 +176,30 @@ class Router
                 warningf("this route config mca length is: %d (%s)", mcaArray.length, mca);
                 return null;
             }
+            
+            string className;
 
             if (mcaArray.length == 2)
             {
                 route.setController(mcaArray[0]);
                 route.setAction(mcaArray[1]);
+
+                className = "app.controller." ~ ((group == DEFUALT_ROUTE_GROUP) ? "" : group ~ ".") ~ route.getController() ~ "controller";
             }
             else
             {
                 route.setModule(mcaArray[0]);
                 route.setController(mcaArray[1]);
                 route.setAction(mcaArray[2]);
+
+                className = "app." ~ route.getModule() ~ ".controller." ~ ((group == DEFUALT_ROUTE_GROUP) ? "" : group ~ ".") ~ route.getController() ~ "controller";
             }
+
+            import std.string : toLower;
+
+            className = className.toLower;
+
+            trace(className);
 
             import std.regex;
             import std.array;
