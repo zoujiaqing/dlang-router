@@ -183,16 +183,12 @@ class Router
             {
                 route.setController(mcaArray[0]);
                 route.setAction(mcaArray[1]);
-
-                className = "app.controller." ~ ((group == DEFUALT_ROUTE_GROUP) ? "" : group ~ ".") ~ route.getController() ~ "controller";
             }
             else
             {
                 route.setModule(mcaArray[0]);
                 route.setController(mcaArray[1]);
                 route.setAction(mcaArray[2]);
-
-                className = "app." ~ route.getModule() ~ ".controller." ~ ((group == DEFUALT_ROUTE_GROUP) ? "" : group ~ ".") ~ route.getController() ~ "controller";
             }
 
             import std.string : toLower;
